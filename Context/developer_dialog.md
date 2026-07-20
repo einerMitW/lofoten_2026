@@ -95,16 +95,16 @@ Verwende ich es in 1, 6, 12 Monaten noch?
 
 ## 6) High Level Architektur
 Welche generellen Container hat das System (Frontend, Backend, DB, ...)? (Am besten in einem C4-Modell)
-- Frontend (Vue.js App)
-- Backend (FastAPI API)
+- Frontend
+- Backend
 - GPX Datei Ablage (Dateisystem)
 - Bilddateien Ablage (Dateisystem)
-- Bilder-Metadaten speichern in einer relationalen SQLite Datenbank.
+- Bilder-Metadaten speichern.
 
 *Hinweis:* Backend und Frontend werden zunächst in eigenen Ordnern innerhalb desselben Projekts (Monorepo) entwickelt. Später sollen sie containerisierbar (Docker) gemacht werden.
 
 Wie sieht die Kommunikation zwischen diesen Teilen aus (Wer muss mit wem verbunden werden)?
-- Frontend mit Backend (Synchron)
+- Frontend mit Backend
 - Backend mit DB und GPX Datein
 
 Welches sind die kritischen Bestandteile meiner Architektur, ohne die die Applikation gar nicht läuft?
