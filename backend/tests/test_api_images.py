@@ -1,5 +1,4 @@
 import pytest
-import io
 from fastapi.testclient import TestClient
 from backend.main import app
 
@@ -11,7 +10,7 @@ def test_upload_image_unauthorized():
     assert response.status_code == 401
 
 def test_upload_image_invalid_extension():
-    login_resp = client.post("/api/auth/login", json={"password": "lofoten2026admin"})
+    login_resp = client.post("/api/auth/login", json={"password": "test_admin_pass"})
     token = login_resp.json()["token"]
     headers = {"Authorization": f"Bearer {token}"}
     
@@ -20,7 +19,7 @@ def test_upload_image_invalid_extension():
     assert response.status_code == 400
 
 def test_upload_and_serve_image_success():
-    login_resp = client.post("/api/auth/login", json={"password": "lofoten2026admin"})
+    login_resp = client.post("/api/auth/login", json={"password": "test_admin_pass"})
     token = login_resp.json()["token"]
     headers = {"Authorization": f"Bearer {token}"}
     

@@ -70,7 +70,7 @@ def _extract_sort_key(filename: str) -> float:
     return 999.0
 
 def parse_all_gpx_files(gpx_directory: str) -> Tuple[Dict[str, Any], Dict[str, Any]]:
-    """Parses all GPX files in directory in stage order and aggregates them into a GeoJSON FeatureCollection."""
+    """Parses all GPX files in directory in stage order, auto-aligns track direction, and aggregates into GeoJSON."""
     if not os.path.exists(gpx_directory):
         return {"type": "FeatureCollection", "features": []}, {
             "total_distance_km": 0.0,
@@ -94,6 +94,18 @@ def parse_all_gpx_files(gpx_directory: str) -> Tuple[Dict[str, Any], Dict[str, A
         file_path = os.path.join(gpx_directory, filename)
         points, telemetry = parse_gpx_file(file_path)
         if points:
+            # Auto-align track direction if segment is reversed relative to previous stage end
+            if all_points and len(points) > 1:
+                prev_end_lon, prev_end_lat = all_points[-1][0], all_points[-1][1]
+                curr_start_lon, curr_start_lat = points[0][0], points[0][1]
+                curr_end_lon, curr_end_lat = points[-1][0], points[-1][1]
+                
+                dist_to_start = calculate_haversine_distance(prev_end_lat, prev_end_lon, curr_start_lat, curr_start_lon)
+                dist_to_end = calculate_haversine_distance(prev_end_lat, prev_end_lon, curr_end_lat, curr_end_lon)
+                
+                if dist_to_end < dist_to_start:
+                    points.reverse()
+
             all_points.extend(points)
             total_distance += telemetry["total_distance_km"]
             total_gain += telemetry["elevation_gain"]

@@ -20,24 +20,25 @@ const mapContainer = ref(null);
 let map = null;
 let routeLayer = null;
 let markersLayer = null;
+let scrubberLayer = null;
 let scrubberMarker = null;
+let initialFitDone = false;
 
 onMounted(() => {
   if (!mapContainer.value) return;
 
-  // Initialize Leaflet map over Lofoten (Moskenesøya default view)
   map = L.map(mapContainer.value, {
     zoomControl: false,
     attributionControl: false
   }).setView([68.0, 13.5], 9);
 
-  // CartoDB Dark Matter tiles (styled via CSS matrix filter)
   L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
     maxZoom: 19,
     subdomains: 'abcd'
   }).addTo(map);
 
   markersLayer = L.layerGroup().addTo(map);
+  scrubberLayer = L.layerGroup().addTo(map);
 
   map.on('click', (e) => {
     emit('map-click', { lat: e.latlng.lat, lng: e.latlng.lng });
@@ -61,8 +62,9 @@ function renderRoute(geojson) {
     }
   }).addTo(map);
 
-  if (routeLayer.getBounds().isValid()) {
+  if (!initialFitDone && routeLayer.getBounds().isValid()) {
     map.fitBounds(routeLayer.getBounds(), { padding: [40, 40] });
+    initialFitDone = true;
   }
 }
 
@@ -87,9 +89,10 @@ watch(() => props.geojson, (newVal) => renderRoute(newVal));
 watch(() => props.waypoints, (newVal) => renderWaypoints(newVal), { deep: true });
 
 watch(() => props.scrubCoords, (coords) => {
-  if (!map) return;
+  if (!map || !scrubberLayer) return;
   if (!coords || coords.length < 2) {
-    if (scrubberMarker) map.removeLayer(scrubberMarker);
+    scrubberLayer.clearLayers();
+    scrubberMarker = null;
     return;
   }
   const [lng, lat] = coords;
@@ -100,7 +103,8 @@ watch(() => props.scrubCoords, (coords) => {
       fillColor: '#ff4a5a',
       fillOpacity: 1,
       weight: 2
-    }).addTo(map);
+    });
+    scrubberLayer.addLayer(scrubberMarker);
   } else {
     scrubberMarker.setLatLng([lat, lng]);
   }

@@ -30,4 +30,17 @@ describe('ImagePopup.vue', () => {
     await wrapper.find('.close-btn').trigger('click');
     expect(wrapper.emitted('close')).toBeTruthy();
   });
+
+  it('shows delete button in admin mode and emits delete event', async () => {
+    const wrapper = mount(ImagePopup, {
+      props: { waypoint: sampleWaypoint, isAdmin: true }
+    });
+
+    const deleteBtn = wrapper.find('.delete-btn');
+    expect(deleteBtn.exists()).toBe(true);
+
+    await deleteBtn.trigger('click');
+    expect(wrapper.emitted('delete')).toBeTruthy();
+    expect(wrapper.emitted('delete')[0]).toEqual([1]);
+  });
 });
