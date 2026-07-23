@@ -12,8 +12,8 @@ def test_parse_gpx_file(sample_gpx_content, tmp_path):
     
     points, telemetry = parse_gpx_file(str(gpx_file))
     assert len(points) == 2
-    assert points[0] == [12.977, 67.877, 25.0]
-    assert points[1] == [12.980, 67.880, 50.0]
+    assert points[0][:3] == [12.977, 67.877, 25.0]
+    assert points[1][:3] == [12.980, 67.880, 50.0]
     assert telemetry["max_elevation"] == 50.0
     assert telemetry["min_elevation"] == 25.0
     assert telemetry["elevation_gain"] == 25.0
@@ -26,7 +26,6 @@ def test_gpx_stage_direction_auto_alignment(tmp_path):
   <trkpt lat="67.85" lon="12.85"><ele>20</ele></trkpt>
 </trkseg></trk></gpx>"""
 
-    # Stage 1 saved in reverse direction (start 67.90, end 67.86)
     stage1_reversed = """<?xml version="1.0"?>
 <gpx version="1.1"><trk><trkseg>
   <trkpt lat="67.90" lon="12.90"><ele>30</ele></trkpt>
@@ -42,9 +41,20 @@ def test_gpx_stage_direction_auto_alignment(tmp_path):
     features = geojson["features"]
     assert len(features) == 2
 
-    # Stage 1 coordinates should be inverted so the first point connects smoothly to stage 0 end (67.86, 12.86)
     stage1_coords = features[1]["geometry"]["coordinates"]
-    assert stage1_coords[0][1] == 67.86  # latitude of inverted start point
+    assert stage1_coords[0][1] == 67.86
+
+def test_cumulative_distance_monotonicity():
+    gpx_dir = os.path.join(os.path.dirname(__file__), "..", "..", "GpxStorage")
+    geojson, telemetry = parse_all_gpx_files(gpx_dir)
+    
+    prev_cum_dist = 0.0
+    for feat in geojson["features"]:
+        for pt in feat["geometry"]["coordinates"]:
+            assert len(pt) >= 4  # [lon, lat, ele, cum_dist_km]
+            cum_dist = pt[3]
+            assert cum_dist >= prev_cum_dist
+            prev_cum_dist = cum_dist
 
 def test_parse_all_gpx_files_real_data():
     gpx_dir = os.path.join(os.path.dirname(__file__), "..", "..", "GpxStorage")
