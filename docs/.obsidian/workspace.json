@@ -178,6 +178,11 @@
   },
   "active": "4f1b2b956f9e7a53",
   "lastOpenFiles": [
+    "docker_persistent_volumes.md",
+    "docker_ssl_certificates.md",
+    "docker_backend_container.md",
+    "docker_frontend_nginx.md",
+    "docker_compose_orchestration.md",
     "containerization_docker.md"
   ]
 }
