@@ -195,6 +195,11 @@
   },
   "active": "4f1b2b956f9e7a53",
   "lastOpenFiles": [
+    "deployment_network.md",
+    "api_endpoints.md",
+    "getting_started.md",
+    "setup_guide.md",
+    "project_overview.md",
     "docker_frontend_nginx.md",
     "docker_persistent_volumes.md",
     "docker_ssl_certificates.md",

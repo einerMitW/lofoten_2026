@@ -2,6 +2,13 @@
 
 Willkommen im LLM-Wiki der Lofoten 2026 Webanwendung. Dieser Index verlinkt alle Systemkomponenten, Datenmodelle und Services als strukturierter Wissensgraph.
 
+## Projekt & Deployment Übersicht
+- [[project_overview]]: Kurzbeschreibung und Funktionsumfang der Lofoten 2026 Anwendung.
+- [[setup_guide]]: Schritt-für-Schritt Anleitung zur Einrichtung (Manuell & Docker).
+- [[getting_started]]: Ausführungsanleitung zum Starten der Anwendung und Tests.
+- [[api_endpoints]]: Tabellarische Übersicht aller REST-API Endpunkte.
+- [[deployment_network]]: Dokumentation der Netzwerkinfrastruktur und Portmappings.
+
 ## Backend Komponente
 - [[backend_main]]: FastAPI Einstiegspunkt, CORS & statischer Dateimount.
 - [[backend_config]]: Laden von Umgebungsvariablen & Pfadkonfigurationen.
