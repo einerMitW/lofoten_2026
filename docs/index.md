@@ -42,8 +42,7 @@ Willkommen im LLM-Wiki der Lofoten 2026 Webanwendung. Dieser Index verlinkt alle
 - [[c4_architecture_model]]: C4 System Context & Container Architektur.
 - [[ci_backend_pipeline]]: GitHub Actions CI Workflow für Backend Pytest.
 - [[ci_frontend_pipeline]]: GitHub Actions CI Workflow für Frontend Vitest.
-- [[docker_compose_orchestration]]: Multi-Container Orchestrierung & Netzwerkkonfiguration.
-- [[docker_frontend_nginx]]: Vue 3 Multi-Stage Build & Nginx SSL Reverse Proxy.
+- [[docker_compose_orchestration]]: Multi-Container Orchestrierung & Loopback-Binding (127.0.0.1:5567).
+- [[docker_frontend_nginx]]: Vue 3 Multi-Stage Build & Nginx HTTP Reverse Proxy.
 - [[docker_backend_container]]: Python 3.11-slim Containerisierung des FastAPIs.
-- [[docker_ssl_certificates]]: TLS/SSL-Zertifikatsverwaltung & Mount-Konfiguration.
 - [[docker_persistent_volumes]]: Persistente Speicherung via Docker Named Volumes.

@@ -1,6 +1,6 @@
 # Docker Frontend Nginx
 
-**Summary**: Multi-Stage Container-Build für Vue 3 und Nginx SSL Reverse Proxy Konfiguration.
+**Summary**: Multi-Stage Container-Build für Vue 3 und Nginx HTTP Reverse Proxy Konfiguration.
 
 **Sources**: [[frontend/Dockerfile]], [[frontend/nginx.conf]], [[frontend/.dockerignore]]
 
@@ -15,13 +15,12 @@ Die Komponente `docker_frontend_nginx` verwaltet die Erstellung und Bereitstellu
 1. **Stage 1 (Build)**: Nutzt `node:20-alpine`, führt `npm ci` aus und kompiliert die Vue 3 SPA nach `/app/dist`.
 2. **Stage 2 (Production)**: Kopiert die kompilierte Dist nach `/usr/share/nginx/html` in ein schlankes `nginx:alpine-slim` Image.
 
-## Nginx SSL & Proxy Konfiguration
+## Nginx HTTP & Proxy Konfiguration
 
-- Lauscht auf Port `443` mit SSL/TLS.
-- Terminiert TLS-Verschlüsselung über Zertifikate aus [[docker_ssl_certificates]].
+- Lauscht auf Port `80` (HTTP).
+- Reicht Header `X-Forwarded-Proto $http_x_forwarded_proto` vom übergeordneten Host-Proxy an das Backend durch.
 - Proxy `location /api/` an `http://backend:8000/api/`.
 
 ## Related pages
 - [[docker_compose_orchestration]]
-- [[docker_ssl_certificates]]
 - [[frontend_main]]
