@@ -177,5 +177,8 @@
     }
   },
   "active": "82267a0dbff35871",
-  "lastOpenFiles": []
+  "lastOpenFiles": [
+    "ci_frontend_pipeline.md",
+    "ci_backend_pipeline.md"
+  ]
 }

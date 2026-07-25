@@ -40,3 +40,5 @@ Willkommen im LLM-Wiki der Lofoten 2026 Webanwendung. Dieser Index verlinkt alle
 - [[test_infrastructure_backend]]: Pytest Testsuite, Fixtures & Isolation.
 - [[test_infrastructure_frontend]]: Vitest & JSDOM Frontend-Test-Setup.
 - [[c4_architecture_model]]: C4 System Context & Container Architektur.
+- [[ci_backend_pipeline]]: GitHub Actions CI Workflow für Backend Pytest.
+- [[ci_frontend_pipeline]]: GitHub Actions CI Workflow für Frontend Vitest.
