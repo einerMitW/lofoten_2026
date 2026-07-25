@@ -1,6 +1,6 @@
 # Lofoten 2026 – Web Application
 
-Eine moderne Webanwendung zur Aufbereitung, Routenplanung und interaktiven Erkundung der Lofoten-Fernwanderung 2026.
+Eine Webapp die verhindert, dass entstanden bilder auf wanderungen in der Gallerie verrotten. Duch das Hochladen der Bilder auf die Tatsächliche Route können Wanderungen und Bilder ihre ganze geschichte erzählen.
 
 ---
 
