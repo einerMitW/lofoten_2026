@@ -1,14 +1,14 @@
 {
   "main": {
-    "id": "1ce046bc03478853",
+    "id": "9e1c6d050cf7f9f6",
     "type": "split",
     "children": [
       {
-        "id": "2c4cc4ef23783f2d",
+        "id": "8d091fe828d381dc",
         "type": "tabs",
         "children": [
           {
-            "id": "82267a0dbff35871",
+            "id": "4f1b2b956f9e7a53",
             "type": "leaf",
             "state": {
               "type": "graph",
@@ -23,15 +23,15 @@
     "direction": "vertical"
   },
   "left": {
-    "id": "5ebaf9e93e1db258",
+    "id": "3c63a09ea92f57bc",
     "type": "split",
     "children": [
       {
-        "id": "d9af1efd3b0946a7",
+        "id": "6d37d5fbf35d47f8",
         "type": "tabs",
         "children": [
           {
-            "id": "24b1040c2b119e56",
+            "id": "a4b9905179ebd5d7",
             "type": "leaf",
             "state": {
               "type": "file-explorer",
@@ -44,7 +44,7 @@
             }
           },
           {
-            "id": "e7017bb9dc3880f6",
+            "id": "37436777f9bf41f2",
             "type": "leaf",
             "state": {
               "type": "search",
@@ -61,7 +61,7 @@
             }
           },
           {
-            "id": "47c3686d14480026",
+            "id": "5d9b152a0a6b014e",
             "type": "leaf",
             "state": {
               "type": "bookmarks",
@@ -77,15 +77,15 @@
     "width": 300
   },
   "right": {
-    "id": "9c73c85b49edc2d2",
+    "id": "8e85851870ff1f37",
     "type": "split",
     "children": [
       {
-        "id": "2e48792cd4df5385",
+        "id": "2bd0742a421e827c",
         "type": "tabs",
         "children": [
           {
-            "id": "25f90c4dcae586b1",
+            "id": "cc4a669b53890c02",
             "type": "leaf",
             "state": {
               "type": "backlink",
@@ -103,7 +103,7 @@
             }
           },
           {
-            "id": "bae277672cf653e9",
+            "id": "3b377d324436778e",
             "type": "leaf",
             "state": {
               "type": "outgoing-link",
@@ -116,7 +116,7 @@
             }
           },
           {
-            "id": "4baf5b71ba030828",
+            "id": "902d4e6312848fcd",
             "type": "leaf",
             "state": {
               "type": "tag",
@@ -131,7 +131,7 @@
             }
           },
           {
-            "id": "a0cd6c212a71a857",
+            "id": "a90a8d22d6946682",
             "type": "leaf",
             "state": {
               "type": "all-properties",
@@ -145,7 +145,7 @@
             }
           },
           {
-            "id": "722d9fe5d4fee438",
+            "id": "98baf6ee1e380506",
             "type": "leaf",
             "state": {
               "type": "outline",
@@ -176,9 +176,6 @@
       "bases:Neue Base erstellen": false
     }
   },
-  "active": "82267a0dbff35871",
-  "lastOpenFiles": [
-    "ci_frontend_pipeline.md",
-    "ci_backend_pipeline.md"
-  ]
+  "active": "4f1b2b956f9e7a53",
+  "lastOpenFiles": []
 }
