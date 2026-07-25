@@ -14,18 +14,20 @@ In this way the code, components of the software and the relation of them gets d
 2. Read existing `docs/index.md` to get to know every current documented Component.
 
 ## 📝 Step-by-Step Process (Tier 2: The Process)
-1. **Initial Check**: *What is the first thing to verify?*
+1. **Initial Check**:
 Compare what system changes have been made that are no longer correctly documented.
 Check if Code System components are new and not documented jet. 
 
-2. **Execution**: *Detail the primary actions.*
-    1. Idetify major idea, entitys and key Concept that are not jet documented. Dont write anithing up to this point.
+2. **Execution**:
+    1. Idetify major idea, entitys and key Concept that are not jet documented. Eatch finding must be atomic. An atomic note is a small, self-contained note that focuses on a single core idea and can be understood on its own while being linked to other relevant notes. Dont write anithing up to this point.
     2. Create a overview of your finding for the user and dicuss your findings with him. Wait for his aproval of your findings
     3. Create a concept page in `docs/` named after the component. Reference the sourcefile in the summary header with [[sourcefilename]].
     4. Add wiki-links ([[page-name]]) to connect related pages
     5. Update `docs/index.md` with new pages and one-line descriptions
 
-3. **Validation**: *How do we know the task was successful?*
+3. **Validation**:
+    - Source of eatch Atomic note is referencing a projekt file.
+    - Atomic note follows the structure of `Context/Concpt-page-template.md`.
 
 ## 📚 Deep Knowledge (Tier 3: References)
 *Links to templates, examples, or external documentation that are only needed during execution.*
