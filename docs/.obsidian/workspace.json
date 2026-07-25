@@ -1,0 +1,210 @@
+{
+  "main": {
+    "id": "9e1c6d050cf7f9f6",
+    "type": "split",
+    "children": [
+      {
+        "id": "8d091fe828d381dc",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "4f1b2b956f9e7a53",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "docker_frontend_nginx.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "docker_frontend_nginx"
+            }
+          },
+          {
+            "id": "5a587519e1569a3d",
+            "type": "leaf",
+            "state": {
+              "type": "graph",
+              "state": {},
+              "icon": "lucide-git-fork",
+              "title": "Graph-Ansicht"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "3c63a09ea92f57bc",
+    "type": "split",
+    "children": [
+      {
+        "id": "6d37d5fbf35d47f8",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "a4b9905179ebd5d7",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {
+                "sortOrder": "alphabetical",
+                "autoReveal": false
+              },
+              "icon": "lucide-folder-closed",
+              "title": "Dateiexplorer"
+            }
+          },
+          {
+            "id": "37436777f9bf41f2",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              },
+              "icon": "lucide-search",
+              "title": "Suchen"
+            }
+          },
+          {
+            "id": "5d9b152a0a6b014e",
+            "type": "leaf",
+            "state": {
+              "type": "bookmarks",
+              "state": {},
+              "icon": "lucide-bookmark",
+              "title": "Lesezeichen"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300
+  },
+  "right": {
+    "id": "8e85851870ff1f37",
+    "type": "split",
+    "children": [
+      {
+        "id": "2bd0742a421e827c",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "cc4a669b53890c02",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "file": "docker_frontend_nginx.md",
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-coming-in",
+              "title": "Rückverweise auf docker_frontend_nginx"
+            }
+          },
+          {
+            "id": "3b377d324436778e",
+            "type": "leaf",
+            "state": {
+              "type": "outgoing-link",
+              "state": {
+                "file": "docker_frontend_nginx.md",
+                "linksCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-going-out",
+              "title": "Ausgehende Links von docker_frontend_nginx öffnen"
+            }
+          },
+          {
+            "id": "902d4e6312848fcd",
+            "type": "leaf",
+            "state": {
+              "type": "tag",
+              "state": {
+                "sortOrder": "frequency",
+                "useHierarchy": true,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-tags",
+              "title": "Tags"
+            }
+          },
+          {
+            "id": "a90a8d22d6946682",
+            "type": "leaf",
+            "state": {
+              "type": "all-properties",
+              "state": {
+                "sortOrder": "frequency",
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-archive",
+              "title": "Alle Eigenschaften"
+            }
+          },
+          {
+            "id": "98baf6ee1e380506",
+            "type": "leaf",
+            "state": {
+              "type": "outline",
+              "state": {
+                "file": "docker_frontend_nginx.md",
+                "followCursor": false,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-list",
+              "title": "Gliederung von docker_frontend_nginx"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300,
+    "collapsed": true
+  },
+  "left-ribbon": {
+    "hiddenItems": {
+      "switcher:Schnellauswahl öffnen": false,
+      "graph:Graph-Ansicht öffnen": false,
+      "canvas:Neuen Canvas erstellen": false,
+      "daily-notes:Heutige Notiz öffnen": false,
+      "templates:Vorlage einfügen": false,
+      "command-palette:Befehlspalette öffnen": false,
+      "bases:Neue Base erstellen": false
+    }
+  },
+  "active": "4f1b2b956f9e7a53",
+  "lastOpenFiles": [
+    "deployment_network.md",
+    "api_endpoints.md",
+    "getting_started.md",
+    "setup_guide.md",
+    "project_overview.md",
+    "docker_frontend_nginx.md",
+    "docker_persistent_volumes.md",
+    "docker_ssl_certificates.md",
+    "docker_backend_container.md",
+    "docker_compose_orchestration.md",
+    "containerization_docker.md"
+  ]
+}

@@ -163,14 +163,14 @@ graph TB
 
 ```mermaid
 graph LR
-    subgraph "Frontend – Vue.js"
-        ApiClient["🔗 ApiClient"]
+    subgraph "Frontend: Vue.js"
+        ApiClient[" ApiClient"]
     end
 
-    subgraph "Backend – FastAPI"
-        GpxParser["📄 GpxParser"]
-        WaypointRouter["📍 WaypointRouter"]
-        ImageRouter["🖼️ ImageRouter"]
+    subgraph "Backend: FastAPI"
+        GpxParser["GpxParser"]
+        WaypointRouter["WaypointRouter"]
+        ImageRouter["ImageRouter"]
         AuthRouter["🔐 AuthRouter"]
     end
 
