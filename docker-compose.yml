@@ -7,13 +7,12 @@ services:
       dockerfile: Dockerfile
     container_name: lofoten_backend
     restart: unless-stopped
-    environment:
-      - ADMIN_PASSWORD=${ADMIN_PASSWORD:-admin123}
-      - SECRET_KEY=${SECRET_KEY:-secret_key_lofoten_2026}
+    env_file:
+      - ./backend/.env
     volumes:
-      - lofoten_db_data:/app/data
-      - lofoten_image_storage:/app/ImageStorage
-      - lofoten_gpx_storage:/app/GpxStorage
+      - lofoten_db_data:/app
+      - lofoten_image_storage:/ImageStorage
+      - ./GpxStorage:/GpxStorage
     networks:
       - lofoten_net
 
@@ -37,4 +36,3 @@ networks:
 volumes:
   lofoten_db_data:
   lofoten_image_storage:
-  lofoten_gpx_storage:
