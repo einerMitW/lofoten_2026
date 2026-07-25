@@ -1,0 +1,42 @@
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: lofoten_backend
+    restart: unless-stopped
+    environment:
+      - ADMIN_PASSWORD=${ADMIN_PASSWORD:-admin123}
+      - SECRET_KEY=${SECRET_KEY:-secret_key_lofoten_2026}
+    volumes:
+      - lofoten_db_data:/app/data
+      - lofoten_image_storage:/app/ImageStorage
+      - lofoten_gpx_storage:/app/GpxStorage
+    networks:
+      - lofoten_net
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: lofoten_frontend
+    restart: unless-stopped
+    ports:
+      - "5567:443"
+    volumes:
+      - ./nginx/certs:/etc/nginx/certs:ro
+    depends_on:
+      - backend
+    networks:
+      - lofoten_net
+
+networks:
+  lofoten_net:
+    driver: bridge
+
+volumes:
+  lofoten_db_data:
+  lofoten_image_storage:
+  lofoten_gpx_storage:
