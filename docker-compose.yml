@@ -10,8 +10,8 @@ services:
     env_file:
       - ./backend/.env
     volumes:
-      - lofoten_db_data:/app
-      - lofoten_image_storage:/ImageStorage
+      - ./backend/data.db:/app/data.db
+      - ./ImageStorage:/ImageStorage
       - ./GpxStorage:/GpxStorage
     networks:
       - lofoten_net
@@ -32,7 +32,3 @@ services:
 networks:
   lofoten_net:
     driver: bridge
-
-volumes:
-  lofoten_db_data:
-  lofoten_image_storage:
