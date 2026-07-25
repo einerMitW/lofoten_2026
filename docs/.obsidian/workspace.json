@@ -11,6 +11,20 @@
             "id": "4f1b2b956f9e7a53",
             "type": "leaf",
             "state": {
+              "type": "markdown",
+              "state": {
+                "file": "docker_frontend_nginx.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "docker_frontend_nginx"
+            }
+          },
+          {
+            "id": "5a587519e1569a3d",
+            "type": "leaf",
+            "state": {
               "type": "graph",
               "state": {},
               "icon": "lucide-git-fork",
@@ -90,6 +104,7 @@
             "state": {
               "type": "backlink",
               "state": {
+                "file": "docker_frontend_nginx.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -99,7 +114,7 @@
                 "unlinkedCollapsed": true
               },
               "icon": "links-coming-in",
-              "title": "Rückverweise"
+              "title": "Rückverweise auf docker_frontend_nginx"
             }
           },
           {
@@ -108,11 +123,12 @@
             "state": {
               "type": "outgoing-link",
               "state": {
+                "file": "docker_frontend_nginx.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               },
               "icon": "links-going-out",
-              "title": "Ausgehende Links"
+              "title": "Ausgehende Links von docker_frontend_nginx öffnen"
             }
           },
           {
@@ -150,12 +166,13 @@
             "state": {
               "type": "outline",
               "state": {
+                "file": "docker_frontend_nginx.md",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "Gliederung"
+              "title": "Gliederung von docker_frontend_nginx"
             }
           }
         ]
@@ -177,5 +194,17 @@
     }
   },
   "active": "4f1b2b956f9e7a53",
-  "lastOpenFiles": []
+  "lastOpenFiles": [
+    "deployment_network.md",
+    "api_endpoints.md",
+    "getting_started.md",
+    "setup_guide.md",
+    "project_overview.md",
+    "docker_frontend_nginx.md",
+    "docker_persistent_volumes.md",
+    "docker_ssl_certificates.md",
+    "docker_backend_container.md",
+    "docker_compose_orchestration.md",
+    "containerization_docker.md"
+  ]
 }
