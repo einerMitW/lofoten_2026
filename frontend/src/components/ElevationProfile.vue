@@ -1,48 +1,71 @@
 <template>
   <div class="glass-panel profile-container" tabindex="0" @mouseleave="onMouseLeave">
     <div class="profile-header">
-      <span class="kicker">HÖHENPROFIL & TELEMETRIE</span>
+      <div class="header-title">
+        <span class="kicker">HÖHENPROFIL & TELEMETRIE</span>
+      </div>
       <div class="status-pill">
         <span class="status-dot"></span>
         LIVE TRACKING
       </div>
     </div>
 
-    <div class="metrics-grid">
+    <!-- Compact Telemetry Cards Row -->
+    <div class="metrics-row">
       <div class="telemetry-card">
-        <div class="label">DISTANZ</div>
-        <div class="value">{{ telemetry?.total_distance_km || 0 }} <span class="unit">km</span></div>
+        <span class="label">DISTANZ</span>
+        <span class="value">{{ totalDist.toFixed(1) }} <span class="unit">km</span></span>
       </div>
       <div class="telemetry-card">
-        <div class="label">HÖHENMETER</div>
-        <div class="value">+{{ telemetry?.elevation_gain || 0 }} <span class="unit">m</span></div>
+        <span class="label">HÖHENMETER</span>
+        <span class="value">+{{ (telemetry?.elevation_gain || 0).toFixed(0) }} <span class="unit">m</span></span>
       </div>
       <div class="telemetry-card">
-        <div class="label">MAX. HÖHE</div>
-        <div class="value">{{ telemetry?.max_elevation || 0 }} <span class="unit">m</span></div>
+        <span class="label">MAX. HÖHE</span>
+        <span class="value">{{ maxEle.toFixed(0) }} <span class="unit">m</span></span>
+      </div>
+      <div class="telemetry-card">
+        <span class="label">MIN. HÖHE</span>
+        <span class="value">{{ minEle.toFixed(0) }} <span class="unit">m</span></span>
       </div>
     </div>
 
-    <!-- SVG Elevation Chart -->
+    <!-- SVG Elevation Chart with Axes -->
     <div class="chart-wrapper" ref="chartWrapper" @mousemove="onMouseMove">
-      <svg class="elevation-svg" viewBox="0 0 500 120" preserveAspectRatio="none">
+      <svg class="elevation-svg" viewBox="0 0 500 160" preserveAspectRatio="none">
         <defs>
           <linearGradient id="chartGradient" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stop-color="#ff4a5a" stop-opacity="0.4"/>
-            <stop offset="100%" stop-color="#ff4a5a" stop-opacity="0.0"/>
+            <stop offset="0%" stop-color="#ff4a5a" stop-opacity="0.45"/>
+            <stop offset="100%" stop-color="#ff4a5a" stop-opacity="0.02"/>
           </linearGradient>
         </defs>
 
-        <!-- Grid Lines -->
-        <line x1="0" y1="30" x2="500" y2="30" stroke="rgba(255,255,255,0.08)" stroke-dasharray="3 4"/>
-        <line x1="0" y1="70" x2="500" y2="70" stroke="rgba(255,255,255,0.08)" stroke-dasharray="3 4"/>
+        <!-- Y-Axis Grid & Labels -->
+        <g class="y-axis">
+          <line x1="35" y1="20" x2="495" y2="20" stroke="rgba(255,255,255,0.08)" stroke-dasharray="3 4"/>
+          <text x="30" y="24" class="axis-label" text-anchor="end">{{ maxEle.toFixed(0) }}m</text>
 
-        <!-- Area & Line -->
+          <line x1="35" y1="75" x2="495" y2="75" stroke="rgba(255,255,255,0.08)" stroke-dasharray="3 4"/>
+          <text x="30" y="79" class="axis-label" text-anchor="end">{{ ((maxEle + minEle) / 2).toFixed(0) }}m</text>
+
+          <line x1="35" y1="130" x2="495" y2="130" stroke="rgba(255,255,255,0.08)" stroke-dasharray="3 4"/>
+          <text x="30" y="134" class="axis-label" text-anchor="end">{{ minEle.toFixed(0) }}m</text>
+        </g>
+
+        <!-- X-Axis Grid & Labels -->
+        <g class="x-axis">
+          <line x1="35" y1="135" x2="495" y2="135" stroke="rgba(255,255,255,0.15)"/>
+          <text x="35" y="152" class="axis-label" text-anchor="start">0 km</text>
+          <text x="265" y="152" class="axis-label" text-anchor="middle">{{ (totalDist / 2).toFixed(0) }} km</text>
+          <text x="495" y="152" class="axis-label" text-anchor="end">{{ totalDist.toFixed(0) }} km</text>
+        </g>
+
+        <!-- Elevation Area & Line Path -->
         <path :d="areaPath" fill="url(#chartGradient)" />
         <path :d="linePath" fill="none" stroke="#ff4a5a" stroke-width="2" />
 
         <!-- Laser Scrubber Line -->
-        <line v-if="scrubberX !== null" :x1="scrubberX" y1="0" :x2="scrubberX" y2="120" stroke="#ffffff" stroke-width="1.5" />
+        <line v-if="scrubberX !== null" :x1="scrubberX" y1="15" :x2="scrubberX" y2="135" stroke="#ffffff" stroke-width="1.5" />
       </svg>
     </div>
   </div>
@@ -72,19 +95,26 @@ const coordinates = computed(() => {
   return coords;
 });
 
+const totalDist = computed(() => props.telemetry?.total_distance_km || 100.0);
+const maxEle = computed(() => props.telemetry?.max_elevation || 500.0);
+const minEle = computed(() => props.telemetry?.min_elevation || 0.0);
+
 const svgPoints = computed(() => {
   if (coordinates.value.length === 0) return [];
-  const count = coordinates.value.length;
-  let maxEle = 0;
-  coordinates.value.forEach(c => {
-    if (c[2] > maxEle) maxEle = c[2];
-  });
-  if (maxEle === 0) maxEle = 500;
+  const maxH = maxEle.value > 0 ? maxEle.value : 500;
+  const minH = minEle.value;
+  const rangeH = (maxH - minH) || 1;
+  const totalD = totalDist.value || 1;
 
-  return coordinates.value.map((c, i) => {
-    const x = (i / (count - 1)) * 500;
-    const y = 110 - ((c[2] / maxEle) * 95);
-    return { x, y, coords: c };
+  return coordinates.value.map(c => {
+    const ele = c[2] || 0;
+    const cumDist = c[3] !== undefined ? c[3] : 0;
+    
+    // Plot X along chart width (35px to 495px margin for Y-axis)
+    const x = 35 + (cumDist / totalD) * 460;
+    // Plot Y vertically (20px to 130px)
+    const y = 130 - ((ele - minH) / rangeH) * 110;
+    return { x, y, coords: c, cumDist };
   });
 });
 
@@ -97,21 +127,37 @@ const linePath = computed(() => {
 
 const areaPath = computed(() => {
   if (svgPoints.value.length === 0) return '';
-  return `${linePath.value} L 500 120 L 0 120 Z`;
+  return `${linePath.value} L 495 135 L 35 135 Z`;
 });
 
 function onMouseMove(e) {
   if (!chartWrapper.value || svgPoints.value.length === 0) return;
   const rect = chartWrapper.value.getBoundingClientRect();
-  const mouseX = Math.max(0, Math.min(e.clientX - rect.left, rect.width));
-  const ratio = mouseX / rect.width;
   
-  scrubberX.value = ratio * 500;
+  // Account for the 35px Y-axis margin inside the SVG (35px start, 460px plot width)
+  const leftMargin = (35 / 500) * rect.width;
+  const plotWidth = (460 / 500) * rect.width;
   
-  const index = Math.floor(ratio * (svgPoints.value.length - 1));
-  const selectedPoint = svgPoints.value[index];
-  if (selectedPoint) {
-    emit('scrub', selectedPoint.coords);
+  const chartMouseX = Math.max(0, Math.min(e.clientX - rect.left - leftMargin, plotWidth));
+  const ratio = chartMouseX / plotWidth;
+
+  const targetDist = ratio * totalDist.value;
+  
+  // Find point with cumulative distance closest to targetDist
+  let closestPoint = svgPoints.value[0];
+  let minDiff = Math.abs(closestPoint.cumDist - targetDist);
+  
+  for (let i = 1; i < svgPoints.value.length; i++) {
+    const diff = Math.abs(svgPoints.value[i].cumDist - targetDist);
+    if (diff < minDiff) {
+      minDiff = diff;
+      closestPoint = svgPoints.value[i];
+    }
+  }
+
+  if (closestPoint) {
+    scrubberX.value = closestPoint.x;
+    emit('scrub', closestPoint.coords);
   }
 }
 
@@ -126,8 +172,8 @@ function onMouseLeave() {
   position: absolute;
   bottom: 24px;
   right: 24px;
-  width: 440px;
-  padding: 16px 20px;
+  width: 520px;
+  padding: 14px 18px;
   z-index: 10;
 }
 
@@ -135,45 +181,51 @@ function onMouseLeave() {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 14px;
+  margin-bottom: 10px;
 }
 
 .kicker {
   font-family: var(--font-mono);
-  font-size: 0.7rem;
+  font-size: 0.65rem;
   font-weight: 700;
   letter-spacing: 0.1em;
   color: var(--muted);
 }
 
-.metrics-grid {
+.metrics-row {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 10px;
-  margin-bottom: 14px;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.telemetry-card {
+  padding: 6px 8px;
+  display: flex;
+  flex-direction: column;
 }
 
 .label {
-  font-size: 0.65rem;
+  font-size: 0.6rem;
   color: var(--muted);
-  letter-spacing: 0.08em;
-  margin-bottom: 4px;
+  letter-spacing: 0.06em;
+  margin-bottom: 2px;
 }
 
 .value {
-  font-size: 1.1rem;
+  font-size: 0.95rem;
   font-weight: 700;
   color: var(--fg);
 }
 
 .unit {
-  font-size: 0.75rem;
+  font-size: 0.7rem;
   color: var(--muted);
   font-weight: 400;
 }
 
 .chart-wrapper {
-  height: 90px;
+  height: 160px;
   width: 100%;
   cursor: crosshair;
   position: relative;
@@ -183,5 +235,11 @@ function onMouseLeave() {
   width: 100%;
   height: 100%;
   overflow: visible;
+}
+
+.axis-label {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  fill: var(--muted);
 }
 </style>

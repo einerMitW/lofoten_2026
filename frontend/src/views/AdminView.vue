@@ -7,7 +7,7 @@
         <div class="title-section">
           <div class="meta">ADMIN EDITOR MODUS</div>
           <h2>LOFOTEN 2026</h2>
-          <p class="instruction">Klicke auf die Karte, um einen neuen Bild-Wegpunkt zu platzieren.</p>
+          <p class="instruction">Klicke auf die Karte zum Platzieren oder auf einen Marker zum Löschen.</p>
         </div>
         <button class="logout-btn" @click="token = null">ABMELDEN</button>
       </div>
@@ -17,6 +17,7 @@
         :waypoints="waypoints"
         :adminMode="true"
         @map-click="handleMapClick"
+        @select-waypoint="openWaypoint"
       />
 
       <ImageUpload 
@@ -25,6 +26,14 @@
         :token="token"
         @saved="onWaypointSaved"
         @cancel="clickCoords = null"
+      />
+
+      <ImagePopup 
+        v-if="selectedWaypoint"
+        :waypoint="selectedWaypoint"
+        :isAdmin="true"
+        @close="selectedWaypoint = null"
+        @delete="handleDeleteWaypoint"
       />
     </template>
   </div>
@@ -35,12 +44,14 @@ import { ref, onMounted } from 'vue';
 import MapView from '../components/MapView.vue';
 import AdminLogin from '../components/AdminLogin.vue';
 import ImageUpload from '../components/ImageUpload.vue';
+import ImagePopup from '../components/ImagePopup.vue';
 import { API } from '../services/api.js';
 
 const token = ref(null);
 const routeGeojson = ref(null);
 const waypoints = ref([]);
 const clickCoords = ref(null);
+const selectedWaypoint = ref(null);
 
 onMounted(async () => {
   try {
@@ -57,14 +68,28 @@ function onAuthenticated(t) {
 }
 
 function handleMapClick(coords) {
-  if (token.value) {
+  if (token.value && !selectedWaypoint.value) {
     clickCoords.value = coords;
   }
+}
+
+function openWaypoint(wp) {
+  selectedWaypoint.value = wp;
 }
 
 async function onWaypointSaved() {
   clickCoords.value = null;
   waypoints.value = await API.getWaypoints();
+}
+
+async function handleDeleteWaypoint(id) {
+  try {
+    await API.deleteWaypoint(id, token.value);
+    selectedWaypoint.value = null;
+    waypoints.value = await API.getWaypoints();
+  } catch (err) {
+    console.error('Failed to delete waypoint:', err);
+  }
 }
 </script>
 

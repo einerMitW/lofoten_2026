@@ -12,8 +12,13 @@
         <h2 class="title">{{ waypoint.title }}</h2>
         <p v-if="waypoint.description" class="description">{{ waypoint.description }}</p>
 
-        <div class="coords-info">
-          📍 {{ waypoint.lat.toFixed(4) }}° N, {{ waypoint.lng.toFixed(4) }}° E
+        <div class="footer-row">
+          <div class="coords-info">
+            📍 {{ waypoint.lat.toFixed(4) }}° N, {{ waypoint.lng.toFixed(4) }}° E
+          </div>
+          <button v-if="isAdmin" class="delete-btn" @click="handleDelete">
+            WEGPUNKT LÖSCHEN
+          </button>
         </div>
       </div>
     </div>
@@ -22,13 +27,20 @@
 
 <script setup>
 const props = defineProps({
-  waypoint: Object
+  waypoint: Object,
+  isAdmin: Boolean
 });
 
-const emit = defineEmits(['close']);
+const emit = defineEmits(['close', 'delete']);
 
 function close() {
   emit('close');
+}
+
+function handleDelete() {
+  if (props.waypoint && props.waypoint.id) {
+    emit('delete', props.waypoint.id);
+  }
 }
 </script>
 
@@ -110,12 +122,36 @@ function close() {
   margin-bottom: 16px;
 }
 
+.footer-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-top: 1px solid var(--border);
+  padding-top: 12px;
+  gap: 12px;
+}
+
 .coords-info {
   font-family: var(--font-mono);
   font-size: 0.75rem;
   color: var(--muted);
-  border-top: 1px solid var(--border);
-  padding-top: 10px;
+}
+
+.delete-btn {
+  padding: 6px 12px;
+  background: rgba(255, 74, 90, 0.2);
+  color: var(--accent);
+  border: 1px solid var(--accent);
+  border-radius: 4px;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.delete-btn:hover {
+  background: var(--accent);
+  color: #fff;
 }
 
 @keyframes fadeUp {

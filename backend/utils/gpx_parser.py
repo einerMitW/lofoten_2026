@@ -7,7 +7,7 @@ from typing import List, Tuple, Dict, Any
 
 def calculate_haversine_distance(lat1: float, lon1: float, lat2: float, lon2: float) -> float:
     """Calculates distance in km between two lat/lon points using Haversine formula."""
-    R = 6371.0  # Earth radius in kilometers
+    R = 6371.0
     dlat = math.radians(lat2 - lat1)
     dlon = math.radians(lon2 - lon1)
     a = (math.sin(dlat / 2) ** 2 +
@@ -16,7 +16,7 @@ def calculate_haversine_distance(lat1: float, lon1: float, lat2: float, lon2: fl
     return R * c
 
 def parse_gpx_file(file_path: str) -> Tuple[List[List[float]], Dict[str, float]]:
-    """Parses a single GPX file and returns track points [lon, lat, ele] and telemetry."""
+    """Parses a single GPX file and returns track points [lon, lat, ele, cum_dist_km] and telemetry."""
     points: List[List[float]] = []
     total_distance_km = 0.0
     elevation_gain = 0.0
@@ -31,8 +31,6 @@ def parse_gpx_file(file_path: str) -> Tuple[List[List[float]], Dict[str, float]]
         for segment in track.segments:
             for pt in segment.points:
                 ele = pt.elevation if pt.elevation is not None else 0.0
-                coords = [pt.longitude, pt.latitude, ele]
-                points.append(coords)
                 
                 max_elevation = max(max_elevation, ele)
                 min_elevation = min(min_elevation, ele)
@@ -46,6 +44,8 @@ def parse_gpx_file(file_path: str) -> Tuple[List[List[float]], Dict[str, float]]
                     if ele_diff > 0:
                         elevation_gain += ele_diff
                         
+                coords = [pt.longitude, pt.latitude, ele, round(total_distance_km, 3)]
+                points.append(coords)
                 prev_point = pt
                 
     if not points:
@@ -70,7 +70,7 @@ def _extract_sort_key(filename: str) -> float:
     return 999.0
 
 def parse_all_gpx_files(gpx_directory: str) -> Tuple[Dict[str, Any], Dict[str, Any]]:
-    """Parses all GPX files in directory in stage order and aggregates them into a GeoJSON FeatureCollection."""
+    """Parses all GPX files in directory in stage order, auto-aligns track direction, and calculates cumulative distance."""
     if not os.path.exists(gpx_directory):
         return {"type": "FeatureCollection", "features": []}, {
             "total_distance_km": 0.0,
@@ -83,7 +83,7 @@ def parse_all_gpx_files(gpx_directory: str) -> Tuple[Dict[str, Any], Dict[str, A
     files.sort(key=_extract_sort_key)
     
     all_points: List[List[float]] = []
-    total_distance = 0.0
+    accumulated_distance = 0.0
     total_gain = 0.0
     max_ele = -9999.0
     min_ele = 9999.0
@@ -94,8 +94,31 @@ def parse_all_gpx_files(gpx_directory: str) -> Tuple[Dict[str, Any], Dict[str, A
         file_path = os.path.join(gpx_directory, filename)
         points, telemetry = parse_gpx_file(file_path)
         if points:
-            all_points.extend(points)
-            total_distance += telemetry["total_distance_km"]
+            # Check if stage points run in reverse relative to previous stage end
+            if all_points and len(points) > 1:
+                prev_end_lon, prev_end_lat = all_points[-1][0], all_points[-1][1]
+                curr_start_lon, curr_start_lat = points[0][0], points[0][1]
+                curr_end_lon, curr_end_lat = points[-1][0], points[-1][1]
+                
+                dist_to_start = calculate_haversine_distance(prev_end_lat, prev_end_lon, curr_start_lat, curr_start_lon)
+                dist_to_end = calculate_haversine_distance(prev_end_lat, prev_end_lon, curr_end_lat, curr_end_lon)
+                
+                if dist_to_end < dist_to_start:
+                    points.reverse()
+
+            # Re-index points with global cumulative distance
+            aligned_points = []
+            prev_pt = all_points[-1] if all_points else None
+            
+            for pt in points:
+                if prev_pt is not None:
+                    step_dist = calculate_haversine_distance(prev_pt[1], prev_pt[0], pt[1], pt[0])
+                    accumulated_distance += step_dist
+                aligned_pt = [pt[0], pt[1], pt[2], round(accumulated_distance, 3)]
+                aligned_points.append(aligned_pt)
+                prev_pt = aligned_pt
+
+            all_points.extend(aligned_points)
             total_gain += telemetry["elevation_gain"]
             max_ele = max(max_ele, telemetry["max_elevation"])
             min_ele = min(min_ele, telemetry["min_elevation"])
@@ -109,7 +132,7 @@ def parse_all_gpx_files(gpx_directory: str) -> Tuple[Dict[str, Any], Dict[str, A
                 },
                 "geometry": {
                     "type": "LineString",
-                    "coordinates": points
+                    "coordinates": aligned_points
                 }
             })
             
@@ -118,7 +141,7 @@ def parse_all_gpx_files(gpx_directory: str) -> Tuple[Dict[str, Any], Dict[str, A
         min_ele = 0.0
         
     overall_telemetry = {
-        "total_distance_km": round(total_distance, 2),
+        "total_distance_km": round(accumulated_distance, 2),
         "elevation_gain": round(total_gain, 1),
         "max_elevation": round(max_ele, 1),
         "min_elevation": round(min_ele, 1),

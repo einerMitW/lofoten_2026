@@ -21,8 +21,8 @@ def test_create_waypoint_unauthorized():
     assert response.status_code == 401
 
 def test_create_and_delete_waypoint_authorized():
-    # Login first
-    login_resp = client.post("/api/auth/login", json={"password": "lofoten2026admin"})
+    # Login first with deterministic test password
+    login_resp = client.post("/api/auth/login", json={"password": "test_admin_pass"})
     token = login_resp.json()["token"]
     headers = {"Authorization": f"Bearer {token}"}
     
